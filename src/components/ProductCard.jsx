@@ -1,8 +1,6 @@
 import { useState } from 'react';
 
-// ProductCard: shows one product with View, Edit and Delete buttons.
 function ProductCard({ product, onView, onEdit, onDelete }) {
-  // If the image URL is broken, show a "No image" box instead.
   const [imageError, setImageError] = useState(false);
 
   return (

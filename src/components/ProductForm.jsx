@@ -1,14 +1,12 @@
 import { useState } from 'react';
 
-// ProductForm: one form used for both Add and Edit.
-// - Add:  product is null, so the fields start empty.
-// - Edit: product is passed in, so the fields start with its values.
 function ProductForm({ product, categories, onSave, onCancel }) {
   const isEdit = product !== null;
 
   const [formData, setFormData] = useState({
     title: product ? product.title : '',
     price: product ? String(product.price) : '',
+    quantity: product ? String(product.stock ?? 0) : '1',
     description: product ? product.description : '',
     category: product ? product.category : '',
     image: product ? product.thumbnail : '',
@@ -17,14 +15,12 @@ function ProductForm({ product, categories, onSave, onCancel }) {
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState('');
 
-  // One change handler for every input, using the input's "name".
   function handleChange(e) {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    setErrors({ ...errors, [name]: '' }); // clear the error while typing
+    setErrors({ ...errors, [name]: '' });
   }
 
-  // Basic validation. Returns an object like { title: 'Title is required' }.
   function validate() {
     const newErrors = {};
 
@@ -32,6 +28,10 @@ function ProductForm({ product, categories, onSave, onCancel }) {
 
     if (formData.price === '') newErrors.price = 'Price is required';
     else if (Number(formData.price) <= 0) newErrors.price = 'Price must be greater than 0';
+
+    if (formData.quantity === '') newErrors.quantity = 'Quantity is required';
+    else if (!Number.isInteger(Number(formData.quantity)) || Number(formData.quantity) < 0)
+      newErrors.quantity = 'Quantity must be a whole number (0 or more)';
 
     if (formData.description.trim() === '') newErrors.description = 'Description is required';
 
@@ -48,19 +48,18 @@ function ProductForm({ product, categories, onSave, onCancel }) {
 
     const newErrors = validate();
     setErrors(newErrors);
-    if (Object.keys(newErrors).length > 0) return; // stop if there are errors
+    if (Object.keys(newErrors).length > 0) return;
 
     setSaving(true);
     setSaveError('');
     try {
-      await onSave(formData); // App.jsx sends the API request and closes the form
+      await onSave(formData);
     } catch (err) {
       setSaveError(err.message);
       setSaving(false);
     }
   }
 
-  // Make sure the product's category is in the dropdown when editing.
   const categoryOptions =
     formData.category && !categories.includes(formData.category)
       ? [formData.category, ...categories]
@@ -119,6 +118,21 @@ function ProductForm({ product, categories, onSave, onCancel }) {
               />
               {errors.price && <p id="price-error" className="mt-1 text-sm text-red-600">{errors.price}</p>}
             </div>
+            <div className="mb-4 flex-1">
+              <label htmlFor="quantity" className="mb-1.5 block text-sm font-semibold">Quantity</label>
+              <input
+                id="quantity"
+                name="quantity"
+                type="number"
+                min="0"
+                step="1"
+                className={errors.quantity ? 'input border-red-500' : 'input'}
+                value={formData.quantity}
+                onChange={handleChange}
+                placeholder="Enter quantity"
+              />
+              {errors.quantity && <p id="quantity-error" className="mt-1 text-sm text-red-600">{errors.quantity}</p>}
+            </div>
 
             <div className="mb-4 flex-1">
               <label htmlFor="category" className="mb-1.5 block text-sm font-semibold">Category</label>
@@ -129,6 +143,7 @@ function ProductForm({ product, categories, onSave, onCancel }) {
                 value={formData.category}
                 onChange={handleChange}
               >
+
                 <option value="">Select category</option>
                 {categoryOptions.map((item) => (
                   <option key={item} value={item}>

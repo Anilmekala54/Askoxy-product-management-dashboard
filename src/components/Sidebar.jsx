@@ -1,9 +1,5 @@
-// Sidebar: navigation + category list.
-// - Desktop (lg and up): always visible on the left.
-// - Mobile/tablet: hidden, slides in when the menu button in the Header is clicked.
 import { Plus , PackagePlus  } from 'lucide-react';
 function Sidebar({ isOpen, onClose, categories, category, onCategoryChange, onShowAll, onAddClick }) {
-  // Run the action, then close the menu (only matters on mobile).
   function handleClick(action) {
     action();
     onClose();
@@ -11,7 +7,7 @@ function Sidebar({ isOpen, onClose, categories, category, onCategoryChange, onSh
 
   return (
     <>
-      {/* Dark background behind the menu on mobile. Clicking it closes the menu. */}
+
       {isOpen && <div className="fixed inset-0 z-30 bg-slate-900/40 lg:hidden" onClick={onClose}></div>}
 
       <aside
@@ -19,7 +15,7 @@ function Sidebar({ isOpen, onClose, categories, category, onCategoryChange, onSh
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        {/* Logo */}
+
         <div className="flex h-16 items-center justify-between border-b border-slate-200 px-5">
           <div className="flex items-center gap-2.5">
             <span className="flex h-9 w-9 items-center justify-center rounded-lg font-bold text-white">
@@ -37,7 +33,7 @@ function Sidebar({ isOpen, onClose, categories, category, onCategoryChange, onSh
         </div>
 
         <nav className="flex-1 overflow-y-auto p-3">
-          {/* Main menu */}
+
           <p className="px-3 pt-2 pb-2 text-xs font-semibold tracking-wider text-slate-400 uppercase">Menu</p>
           <button
             className={`mb-1 w-full cursor-pointer rounded-lg px-3 py-2.5 text-left text-sm font-medium ${
@@ -54,7 +50,6 @@ function Sidebar({ isOpen, onClose, categories, category, onCategoryChange, onSh
            <div className='flex '><Plus /> <span>Add Product</span> </div>
           </button>
 
-          {/* Category list - clicking one filters the products */}
           <p className="px-3 pt-6 pb-2 text-xs font-semibold tracking-wider text-slate-400 uppercase">Categories</p>
           {categories.map((item) => (
             <button

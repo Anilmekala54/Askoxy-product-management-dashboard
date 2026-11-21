@@ -43,9 +43,16 @@ src/
     ProductCard.jsx   # One product card with View / Edit / Delete buttons
     ProductForm.jsx   # Add / Edit form (one form used for both)
     Pagination.jsx    # Previous / page number / Next
+    ProductList.jsx        # Grid of ProductCards (.map)
+    ProductDetails.jsx     # Product details modal
+    DeleteConfirmation.jsx # Delete confirmation modal
+    Loading.jsx            # Spinner + message
+    ErrorMessage.jsx       # Error message + Retry button
+    EmptyState.jsx         # "No products found" messages + Clear filters
+    SuccessMessage.jsx     # Green success message after add / edit / delete
   services/
     productService.js # All API request functions (fetch)
-  App.jsx             # State, API calls, search, filtering, pagination, CRUD, modals
+  App.jsx             # Parent: state, API calls, search, filtering, pagination, CRUD; passes props to children
   index.css           # Tailwind import + reusable button/input classes
   main.jsx            # React entry point
 ```

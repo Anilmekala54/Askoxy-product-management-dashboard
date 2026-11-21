@@ -1,4 +1,3 @@
-// Pagination: Previous / current page / Next buttons.
 function Pagination({ currentPage, totalPage, setCurrentPage }) {
   return (
     <nav className="mt-8 flex items-center justify-center gap-4" aria-label="Pagination">
